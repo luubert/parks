@@ -91,6 +91,46 @@ function createMap() {
            *Once the filter dialog has been created add it to the left (or floating mobile) panel 
            */
             appcontent.setPanelContent(options.i18n.viewer.content_title , content, "340px");
+            var planType = new dojo.store.Memory({idProperty: "name",
+              data: [
+                  {name:"Ball Hockey Rink", id:"BALL HOCKEY"},
+                  {name:"Baseball Diamond", id:"BASEBALL"},
+                  {name:"Basketball Court", id:"BASKETBALL COURT"},
+                  {name:"Basketball Hoop", id:"BASKETBALL HOOP"},
+                  {name:"Beach", id:"BEACH"},
+                  {name:"Boat Launch", id:"BOAT LAUNCH LARGE"},
+                  {name:"Skateboard Park", id:"CONCRETE PARK"},
+                  {name:"Cricket Field", id:"CRICKET"},
+                  {name:"Dirt Jump", id:"DIRT JUMP"},
+                  {name:"Football Field", id:"FOOTBALL"},
+                  {name:"Ice Rink", id:"GENERAL OUTDOOR RINK"},
+                  {name:"Campground", id:"GENERAL CAMPGROUND"},
+                  {name:"Playground", id:"GENERAL PLAYGROUND"},
+                  {name:"Horseshoe Pit", id:"HORSESHOE"},
+                  {name:"Bowling Lawn", id:"LAWN BOWLING"},
+                  {name:"Skateboard Ramp", id:"MODULER RAMPS"},
+                  {name:"Outdoor Gym", id:"OUTDOOR GYM"},
+                  {name:"Pool (Indoor)", id:"17"},
+                  {name:"Pool (Outdoor)", id:"POOL (OUTDOOR)"},
+                  {name:"Rugby Field", id:"RUGBY"},
+                  {name:"Running Track", id:"RUNNING TRACK"},
+                  {name:"Shuffleboard", id:"SHUFFLEBOARD"},
+                  {name:"Soccer Field", id:"SOCCER"},
+                  {name:"Spray Pool", id:"SPRAY POOL"},
+                  {name:"Tennis Court", id:"TENNIS"},
+                  {name:"Ultimate Frisbee Field", id:"ULTIMATE FRISBEE"},
+                  {name:"Volleyball Court", id:"VOLLEYBALL"},
+                  {name:"Wharf", id:"WHARF"}
+                ]
+            });
+
+            var planSelect = new dijit.form.FilteringSelect({
+              id: "planidSelect",
+              validate: function(){},
+              store: planType,
+              searchAttr: "name"
+            }, "planidSelect");  
+
        });
 
   }, function(error){
@@ -138,6 +178,11 @@ function buildFilterDialog(layers){
 
 
     //add an apply button to the layer filter group
+      var input = dojo.create("input", {
+        type: "text",
+        id: "planidSelect"
+      }, filterGroup, "last");
+
 
       var b = dojo.create("input", {
         type: "button",
@@ -145,6 +190,8 @@ function buildFilterDialog(layers){
         value: options.i18n.viewer.button_text
       }, filterGroup, "last");
       
+      
+
       dojo.connect(b, "onclick",dojo.hitch(this, function () {
         //if it's a mobile device close the filter panel 
         appcontent.hidePanelContent();
@@ -159,30 +206,7 @@ function buildFilterDialog(layers){
 
         //get the input values to the filter - if not value is specified use the defaults 
            var values = [];
-           dojo.forEach(layer.definitionEditor.inputs, function(input){
-            dojo.forEach(input.parameters, function(param){
-                var widget_id = layer.id + "." + param.parameterId + ".value";
-                var widget = dojo.byId(widget_id);
-                var value = widget.value;
-
-
-                //is it a number
-       
-                var defaultValue = isNaN(param.defaultValue) ? param.defaultValue : dojo.number.parse(param.defaultValue);
-
-                if(isNaN(value)){
-                    values.push((value === "" )? defaultValue : value);
-                }else{
-                    //for some reason "" returns false for is  nan
-                    if(value === ""){
-                        values.push((value === "" )? defaultValue : value);
-                    }else{
-                      values.push(value);
-                     //values.push((value === "" )? dojo.number.parse(defaultValue) : dojo.number.parse(value));
-                   }
-                }
-            });
-           });
+           values.push(dijit.byId("planidSelect").item.id);
 
           var defExp = dojo.replace(layer.definitionEditor.parameterizedExpression, values);
 
@@ -229,7 +253,7 @@ dojo.forEach(layer.definitionEditor.inputs , function(input){
   var pcontent = dojo.create("div",{
     className: "row"
   },content);
-   dojo.forEach(input.parameters,function(param,index){
+   /*dojo.forEach(input.parameters,function(param,index){
       //at this release only numeric and string inputs are supported for interactive queries.  Dates will come later. 
       var paramInputs = null;
       param.inputId = layer.id  + "."  + param.parameterId + ".value";
@@ -267,7 +291,7 @@ dojo.forEach(layer.definitionEditor.inputs , function(input){
         paramInputs +=  " <div> AND</div> ";
       }
       dojo.place( paramInputs , pcontent);
-    });
+    });*/
 
     dojo.create("label",{
         className: "hint",
@@ -302,8 +326,6 @@ function getLayerFields(layer){
             }
          });
   }
-
-
 }
 
 function orientationChanged() {
@@ -312,5 +334,3 @@ function orientationChanged() {
     map.resize();
   }
 }
-
-

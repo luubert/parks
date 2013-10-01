@@ -119,7 +119,8 @@ define(
               }
      
             },
-             queryApplication : function(){
+
+            queryApplication : function(){
     
             //If there is an application id query arcgis.com using esri.arcgis.utils.getItem to get the item info. If the item info includes 
             //itemData.values then the app was configurable so overwrite the default values with the configured values. 
