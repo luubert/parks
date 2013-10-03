@@ -291,7 +291,7 @@ dojo.forEach(layer.definitionEditor.inputs , function(input){
         paramInputs +=  " <div> AND</div> ";
       }
       dojo.place( paramInputs , pcontent);
-    });*/
+    });
 
     dojo.create("label",{
         className: "hint",
@@ -301,6 +301,7 @@ dojo.forEach(layer.definitionEditor.inputs , function(input){
     dojo.create("div",{
       className: "clearBoth"
     },content);
+    */
   });
 
     return content;
